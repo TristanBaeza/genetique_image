@@ -1,5 +1,7 @@
 # genetique_image
 
+<https://github.com/TristanBaeza/genetique_image>
+
 Approximation d'une image par un empilement de polygones réguliers opaques,
 optimisé par un algorithme évolutionnaire. Le programme part de polygones
 tirés au hasard, les fait muter génération après génération, et garde à chaque
@@ -34,7 +36,7 @@ python --version
 ### 2. Récupérer le projet
 
 ```powershell
-git clone <url-du-depot>
+git clone https://github.com/TristanBaeza/genetique_image.git
 cd genetique_image
 ```
 
