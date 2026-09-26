@@ -2,80 +2,79 @@
 
 <https://github.com/TristanBaeza/genetique_image>
 
-Approximation d'une image par un empilement de polygones réguliers opaques,
-optimisé par un algorithme évolutionnaire. Le programme part de polygones
-tirés au hasard, les fait muter génération après génération, et garde à chaque
-fois celui qui ressemble le plus à l'image cible.
+Approximating an image with a stack of opaque regular polygons, optimised by
+an evolutionary algorithm. The program starts from randomly drawn polygons,
+mutates them generation after generation, and keeps the one that looks most
+like the target image.
 
-## Qui a écrit quoi
+## Who wrote what
 
-**L'algorithme est écrit par l'auteur du dépôt**, sans génération de code :
-la géométrie des polygones réguliers, le calcul du masque de pixels par
-produit vectoriel, le score, les mutations, la sélection et la boucle
-d'évolution. Claude (Anthropic) est intervenu en conseil sur ces parties —
-explications, relectures, mesures comparatives de réglages — mais le code est
-celui de l'auteur.
+**The algorithm was written by the author of this repository**, without code
+generation: the geometry of the regular polygons, the pixel mask computed from
+cross products, the score, the mutations, the selection and the evolution
+loop. Claude (Anthropic) advised on those parts — explanations, reviews,
+comparative measurements of settings — but the code is the author's.
 
-**La partie graphique est écrite par Claude** : `classes/viewer.py`, la
-méthode `Polygon.draw_on`, la méthode `Contender.plot`, ainsi que les tests du
-dossier `tests/`.
+**The graphical part was written by Claude**: `classes/viewer.py`, the
+`Polygon.draw_on` method, the `Contender.plot` method, and the tests in the
+`tests/` folder.
 
-## Lancer le projet, pas à pas
+## Running the project, step by step
 
-### 1. Installer Python
+### 1. Install Python
 
-Python 3.13 ou plus récent, depuis [python.org](https://www.python.org/downloads/).
-Sur Windows, cocher **« Add python.exe to PATH »** pendant l'installation.
+Python 3.13 or newer, from [python.org](https://www.python.org/downloads/).
+On Windows, tick **"Add python.exe to PATH"** during the installation.
 
-Vérification :
+To check:
 
 ```powershell
 python --version
 ```
 
-### 2. Récupérer le projet
+### 2. Get the project
 
 ```powershell
 git clone https://github.com/TristanBaeza/genetique_image.git
 cd genetique_image
 ```
 
-### 3. Créer un environnement virtuel
+### 3. Create a virtual environment
 
-Un environnement virtuel est un dossier qui contient sa propre copie de
-Python et ses propres bibliothèques. Il évite que les versions installées pour
-ce projet entrent en conflit avec celles d'un autre.
+A virtual environment is a folder holding its own copy of Python and its own
+libraries. It keeps the versions installed for this project from clashing with
+those of another one.
 
 ```powershell
 python -m venv .venv
 ```
 
-Un dossier `.venv` apparaît. Il n'est pas versionné, chacun crée le sien.
+A `.venv` folder appears. It is not versioned: everyone creates their own.
 
-### 4. Installer les dépendances
+### 4. Install the dependencies
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Cette commande est détaillée dans la section suivante.
+This command is detailed in the next section.
 
-### 5. Choisir l'image cible
+### 5. Choose the target image
 
-N'importe quelle image placée à la racine du projet fait l'affaire. Le nom du
-fichier se règle dans `CONSTANTS.py` :
+Any image placed at the root of the project will do. The file name is set in
+`CONSTANTS.py`:
 
 ```python
 IMAGE_PATH = "mona_lisa.jpg"
 ```
 
-### 6. Lancer
+### 6. Run
 
 ```powershell
 .\.venv\Scripts\python.exe main.py
 ```
 
-Le programme affiche le meilleur score au fil des générations :
+The program prints the best score as the generations go by:
 
 ```
 epoch    0 | best score   169.56M
@@ -83,22 +82,21 @@ epoch  500 | best score    70.18M
 epoch 1000 | best score    42.10M
 ```
 
-Le score est une **distance** à l'image cible : plus il est bas, mieux c'est.
+The score is a **distance** to the target image: the lower, the better.
 
-À la fin, une fenêtre s'ouvre avec l'image cible à gauche, le meilleur
-candidat à droite, et un curseur en bas pour rejouer les instantanés
-enregistrés, du premier au dernier.
+At the end, a window opens with the target image on the left, the best
+contender on the right, and a slider at the bottom to replay the recorded
+snapshots, from the first one to the last.
 
-### 7. Lancer les tests
+### 7. Run the tests
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest
 ```
 
-## Comment fonctionne requirements.txt
+## How requirements.txt works
 
-Ce fichier est la liste des bibliothèques dont le projet a besoin, à raison
-d'une par ligne :
+This file lists the libraries the project needs, one per line:
 
 ```
 pillow==12.3.0
@@ -107,75 +105,71 @@ pytest==9.1.1
 matplotlib==3.11.2
 ```
 
-- **pillow** ouvre et redimensionne l'image cible.
-- **numpy** calcule les masques de pixels et les scores.
-- **matplotlib** dessine les polygones et le curseur.
-- **pytest** lance les tests.
+- **pillow** opens and resizes the target image.
+- **numpy** computes the pixel masks and the scores.
+- **matplotlib** draws the polygons and the slider.
+- **pytest** runs the tests.
 
-Le `==` fixe une version **exacte**. N'importe qui installant le projet
-obtiendra donc les mêmes versions que celles avec lesquelles il a été
-développé, et un changement de comportement dans une nouvelle version d'une
-bibliothèque ne cassera pas le projet sans prévenir. Il existe des contraintes
-plus souples : `>=12.0` accepte toute version à partir de 12.0, et un nom seul
-accepte n'importe quelle version.
+The `==` pins an **exact** version. Anyone installing the project therefore
+gets the same versions it was developed with, and a change of behaviour in a
+new release of a library cannot break the project without warning. Looser
+constraints exist: `>=12.0` accepts any version from 12.0 onwards, and a bare
+name accepts any version at all.
 
-L'installation se fait avec l'option `-r`, qui veut dire « lis la liste dans
-ce fichier » :
+Installing is done with the `-r` option, which means "read the list in this
+file":
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Passer par `.\.venv\Scripts\python.exe -m pip` plutôt que par `pip` tout court
-garantit que l'installation atterrit dans l'environnement virtuel du projet,
-et non dans le Python global de la machine. C'est la source d'erreur la plus
-fréquente : `pip` seul s'adresse au premier Python trouvé dans le `PATH`, qui
-n'est pas forcément celui du projet.
+Going through `.\.venv\Scripts\python.exe -m pip` rather than through plain
+`pip` makes sure the installation lands in the project's virtual environment,
+and not in the machine's global Python. This is the most common mistake: `pip`
+on its own talks to the first Python found in the `PATH`, which is not
+necessarily the project's one.
 
-Pour vérifier ce qui est réellement installé dans l'environnement :
+To check what is actually installed in the environment:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip list
 ```
 
-Après avoir ajouté une bibliothèque, il faut penser à l'ajouter au fichier,
-avec sa version exacte. `pip freeze` affiche la liste complète de
-l'environnement au bon format.
+After adding a library, remember to add it to the file with its exact version.
+`pip freeze` prints the whole environment in the right format.
 
-## Réglages
+## Settings
 
-Tout se règle dans `CONSTANTS.py`. Les valeurs actuelles correspondent au
-preset B ci-dessous.
+Everything is set in `CONSTANTS.py`. The current values match preset B below.
 
-Les meilleurs réglages dépendent du budget de calcul, donc chaque preset est
-réglé pour son propre `N_EPOCHS`, avec `CONTENDERS_AMOUNT = 2` dans les trois
-cas.
+The best settings depend on the computing budget, so each preset is tuned for
+its own `N_EPOCHS`, with `CONTENDERS_AMOUNT = 2` in all three cases.
 
-| réglage | A | B (actif) | C |
+| setting | A | B (active) | C |
 |---|---|---|---|
-| `N_EPOCHS` | 5 000 | 50 000 | 500 000 |
-| `SNAPSHOT_EVERY` | 50 | 500 | 5 000 |
+| `N_EPOCHS` | 5,000 | 50,000 | 500,000 |
+| `SNAPSHOT_EVERY` | 50 | 500 | 5,000 |
 | `N_POLYGONS_TO_MUTATE` | 4 | 1 | 1 |
 | `SIGMA_X`, `SIGMA_Y` | 6.5 | 5 | 5 |
 | `SIGMA_RGB` | 60 | 40 | 40 |
 | `SIGMA_ANGLE` | 15 | 30 | 30 |
 | `SIGMA_RADIUS` | 0.27 | 0.3 | 0.3 |
 | `SIGMA_FINAL_SCALE` | 0.045 | 0.05 | 0.05 |
-| score final | ~48 M | ~20,5 M | ~14 M |
-| durée | ~18 s | ~3 min | ~30 min |
+| final score | ~48M | ~20.5M | ~14M |
+| time | ~18 s | ~3 min | ~30 min |
 
-Pour comparaison, les réglages précédents (1000 candidats, 1000 générations,
-501 000 images évaluées) atteignaient 51,8 M en une trentaine de minutes.
+For comparison, the previous settings (1,000 contenders, 1,000 generations,
+501,000 images evaluated) reached 51.8M in about thirty minutes.
 
-## Organisation du code
+## Code layout
 
-| fichier | rôle |
+| file | role |
 |---|---|
-| `main.py` | point d'entrée : lance l'évolution puis le visualiseur |
-| `CONSTANTS.py` | tous les réglages |
-| `classes/polygon.py` | un polygone régulier : géométrie, masque, mutation |
-| `classes/contender.py` | un candidat : une liste de polygones et son score |
-| `classes/couple.py` | sélection du meilleur parent et création d'un enfant muté |
-| `classes/mapping.py` | l'image cible, la population et la boucle d'évolution |
-| `classes/viewer.py` | la fenêtre de résultat et son curseur |
-| `tests/` | un fichier de tests par classe |
+| `main.py` | entry point: runs the evolution, then the viewer |
+| `CONSTANTS.py` | every setting |
+| `classes/polygon.py` | one regular polygon: geometry, mask, mutation |
+| `classes/contender.py` | one candidate: a list of polygons and its score |
+| `classes/couple.py` | picking the best parent and building a mutated child |
+| `classes/mapping.py` | the target image, the population and the evolution loop |
+| `classes/viewer.py` | the result window and its slider |
+| `tests/` | one test file per class |
